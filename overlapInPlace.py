@@ -20,7 +20,7 @@ users_checked = 0
 print(api.rate_limit_status())
 
 
-# Get subscribers of second user one by one check if they follow trump
+# Get subscribers of second user one by one check if they follow first_user
 # Iterate through followers of the second user in-place and find if they follow first user
 for page in tweepy.Cursor(api.followers_ids, screen_name=second_user_handle).pages():
     for userId in page:
@@ -34,5 +34,3 @@ for page in tweepy.Cursor(api.followers_ids, screen_name=second_user_handle).pag
 
 print("Percentage: " + str((overlaps_found / users_checked) * 100))
 
-
-# 25 days of Trump's twitter
