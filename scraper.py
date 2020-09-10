@@ -52,3 +52,5 @@ def get_followers(login, password, starting_user, pages):
             followers_list.append(txt[32:-4])
 
     return followers_list
+
+# code from a failed PR of @guipleite. Have not tested yet.
