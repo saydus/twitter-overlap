@@ -1,46 +1,54 @@
-import requests
-import os
-import json
+import mechanicalsoup
 
-def auth():
-    return os.environ.get("BEARER_TOKEN")
+from requests_html import HTMLSession
 
-def create_url():
-    query = "from:twitterdev -is:retweet"
-    # Tweet fields are adjustable.
-    # Options include:
-    # attachments, author_id, context_annotations,
-    # conversation_id, created_at, entities, geo, id,
-    # in_reply_to_user_id, lang, non_public_metrics, organic_metrics,
-    # possibly_sensitive, promoted_metrics, public_metrics, referenced_tweets,
-    # source, text, and withheld
-    tweet_fields = "tweet.fields=author_id"
-    url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}".format(
-        query, tweet_fields
-    )
-    return url
+session = HTMLSession()
 
+browser = mechanicalsoup.StatefulBrowser()
+browser.addheaders = [('User-agent', 'Firefox')]
 
-def create_headers(bearer_token):
-    headers = {"Authorization": "Bearer {}".format(bearer_token)}
-    return headers
+def get_followers(login, password, starting_user, pages):
+    '''
+        Get followers from a twitter user
+        login:           username (without the @)
+        password:        user password
+        starting_user:   user to get the followers from
+        Around 18 users per page
+    '''
 
+    headers = {
+        'Accept': 'application/json, text/javascript, */*; q=0.01',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.1.2 Safari/603.3.8',
+        'X-Twitter-Active-User': 'yes',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept-Language': 'en-US'
+    }
 
-def connect_to_endpoint(url, headers):
-    response = requests.request("GET", url, headers=headers)
-    print(response.status_code)
-    if response.status_code != 200:
-        raise Exception(response.status_code, response.text)
-    return response.json()
+    login_page = browser.get("https://twitter.com/login", headers=headers) # Login page
+    login_form = login_page.soup.findAll("form")
+    login_form = login_form[2]
 
+    # Fills the login form then submits it
+    login_form.find("input", {"name": "session[username_or_email]"})["value"] = login
+    login_form.find("input", {"name": "session[password]"})["value"] = password
+    login_response = browser.submit(login_form, login_page.url)
+    login_response.soup()
 
-def main():
-    bearer_token = auth()
-    url = create_url()
-    headers = create_headers(bearer_token)
-    json_response = connect_to_endpoint(url, headers)
-    print(json.dumps(json_response, indent=4, sort_keys=True))
+    # Followers of the desired user
+    browser.open("https://twitter.com/"+starting_user+"/followers")
 
+    profile_link = browser.find_link()
+    browser.follow_link(profile_link)
 
-if __name__ == "__main__":
-    main()
+    followers_list = []
+
+    # Adds each of the followers usernames to followers_list
+    for page in range(pages):
+        page = browser.get_current_page()
+
+        for follower in page.find_all(class_="ProfileCard-screennameLink u-linkComplex js-nav"):
+            txt = str(follower.find('b'))
+            print(txt[32:-4])
+            followers_list.append(txt[32:-4])
+
+    return followers_list
