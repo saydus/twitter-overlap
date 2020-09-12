@@ -2,7 +2,7 @@ Twitter Overlap
 ---
 A python script to find the number of overlapping followers between different Twitter users. 
  
-The script uses [Tweepy](https://github.com/tweepy/tweepy), and because of this [issue](https://github.com/tweepy/tweepy/issues/617) I had to be a little hacky with timeouts (more about this [here](https://docs.google.com/presentation/d/1O3CEgcAUOC1-aQjZ77A3QbBT_meE4uO_xgbYJGdr9Ns/edit?usp=sharing)).
+The script uses [Tweepy](https://github.com/tweepy/tweepy), and because of this [issue](https://github.com/tweepy/tweepy/issues/617), I had to be a little hacky with timeouts (more about this [here](https://docs.google.com/presentation/d/1O3CEgcAUOC1-aQjZ77A3QbBT_meE4uO_xgbYJGdr9Ns/edit?usp=sharing)).
 
 ## Getting Started
 To install Tweepy: `pip3 install tweepy`.
@@ -37,6 +37,6 @@ Repo contains three different approaches to calculate overlaps.
     * Very flexible and close to accurate on a good sample, but never produces the actual result. Hence, good for a quick insight into what the overlap looks like is.
 
 ## Other important stuff
-Running `findOverlap.py`, you will get a `secondUserFollowers.json` file, containing max 150k (or **all** if you uncomment one if-statement to choose method#2 from above)  followers of one account. I save the file because of Twitter API's limitations, which can result in big wait time if you decide to run script again to fetch followers. 
+Running `findOverlap.py`, you will get a `secondUserFollowers.json` file, containing max 150k (or **all** if you uncomment one if-statement to choose method #2 from above)  followers of one account. I save the file because of Twitter API's limitations, which can result in big wait time if you decide to run script again to fetch followers. 
 
 If you stopped the program while fetching the followers, you can just run `readJson.py` which will get you the result using already fetched and cached followers in `secondUserFollowers.json`. 
