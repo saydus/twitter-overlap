@@ -50,9 +50,12 @@ for userId in followersSecond:
 
     if api.show_friendship(source_id=userId, target_screen_name=first_user_handle)[0].following:
         overlaps_found += 1
-    print(str(second_user_follower_num * overlaps_found / users_checked))
+    print(str(users_checked) + " iterations estimates " +
+          str(second_user_follower_num * overlaps_found / users_checked)
+          + " of overlapping followers")
 
-    if users_checked == 180:
+    if users_checked % 180 == 0:
+        print("Cooling down for Twitter API:", time.time())
         time.sleep(15 * 60)
 
 
