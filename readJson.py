@@ -12,7 +12,8 @@ auth.set_access_token(dictionary["access_token"], dictionary["access_token_secre
 
 # wait_on_rate_limit=True stops the script for some time to wait on Twitter API cooldown
 # wait_on_rate_limit_notify will notify us in console if the limit was reached and script is "resting"
-api = tweepy.API(auth, timeout=600, wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True)
+api = tweepy.API(auth, timeout=600, retry_count=10, retry_delay=5, retry_errors=set([503]),
+                 wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True)
 
 
 first_user_handle = dictionary["first_user"]

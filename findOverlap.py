@@ -12,7 +12,8 @@ auth.set_access_token(dictionary["access_token"], dictionary["access_token_secre
 
 # wait_on_rate_limit=True stops the script for some time to wait on Twitter API cooldown
 # wait_on_rate_limit_notify will notify us in console if the limit was reached and script is "resting"
-api = tweepy.API(auth, timeout=600, wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True)
+api = tweepy.API(auth, timeout=600, retry_count=10, retry_delay=5, retry_errors=set([503]),
+                 wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True)
 
 first_user_handle = dictionary["first_user"]
 second_user_handle = dictionary["second_user"]
@@ -32,6 +33,7 @@ for page in tweepy.Cursor(api.followers_ids, screen_name=second_user_handle).pag
         break
 
     if len(followersSecond) % 75000 == 0:
+        print("Sleeping for 15 minutes now")
         time.sleep(15 * 60)  # tweepy crashes when it sleeps on its own so I'll enforce 15 min sleep
 
 print("Finished fetching. Now, let's count who follows ", first_user_handle)
@@ -53,7 +55,7 @@ for userId in followersSecond:
           + " of overlapping followers") # TODO: change these values in mongo for every follower
 
     if users_checked % 180 == 0:
-        print("Cooling down for Twitter API:", time.time())
+        print("Sleeping for 15 minutes now")
         time.sleep(15 * 60)
 
 
