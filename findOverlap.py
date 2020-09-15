@@ -38,7 +38,7 @@ for page in tweepy.Cursor(api.followers_ids, screen_name=second_user_handle).pag
         followers_collection.insert_one({"name": follower})
     numFollowers += len(page)
     print("Added another page of length ", len(page), " followers in followersSecond")
-    if numFollowers >= 150000:  # 150k has a cap of one hour of wait time, comment out if you want full
+    if numFollowers >= 1000000:  # 1 million cap for big accounts
         break
 
     if numFollowers % 75000 == 0:

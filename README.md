@@ -35,7 +35,7 @@ Repo contains three different approaches to calculate overlaps.
     * You would need to provide your Twitter credentials to run it since Twitter requires you to be logged in to see followers.
 
 4. Linear interpolation based on a sample.
-    * For the second solution here, I included a cap of 150k followers for the smaller account. This will allow for a reasonable amount of runtime for fetching followers.
+    * For the second solution here, I included a cap of 1 million followers for the smaller account. This will allow for a reasonable amount of runtime for fetching followers.
     * After calculating the ratio of overlapping followers in a sample, we estimate the following for the whole set of subscribers.
     * Very flexible and close to accurate on a good sample, but never produces the actual result. Hence, good for a quick insight into what the overlap looks like is.
 
