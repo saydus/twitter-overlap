@@ -56,7 +56,7 @@ for userId in followersSecond:
           + " of overlapping followers")
 
     if users_checked % 180 == 0:
-        print("Cooling down for Twitter API:", time.time())
+        print("Cooling down for Twitter API for 15 minutes")
         time.sleep(15 * 60)
 
 

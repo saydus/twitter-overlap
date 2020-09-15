@@ -16,6 +16,9 @@ access_token_secret: "your_access_token_secret"
 
 first_user: "username1"
 second_user: "username2"
+
+mongo_user: "mongo_atlas_username"
+mongo_password: "mongo_password" 
 ```
 For `second_user`, use username of an account with a smaller amount of followers. The reasoning is explained further.
 

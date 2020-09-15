@@ -1,7 +1,7 @@
 import tweepy
 import yaml
-import json
 import time
+import pymongo
 
 # Getting access to key's of our Twitter developer account through config.yaml
 stream = open("config.yaml", 'r')
@@ -18,23 +18,32 @@ api = tweepy.API(auth, timeout=600, retry_count=10, retry_delay=5, retry_errors=
 first_user_handle = dictionary["first_user"]
 second_user_handle = dictionary["second_user"]
 
+mongo_user = dictionary["mongo_user"]
+mongo_password = dictionary["mongo_password"]
+mongo_url = "mongodb+srv://" + mongo_user + ":" + mongo_password + \
+            "@cluster0.ecwwk.mongodb.net/<dbname>?retryWrites=true&w=majority"
+
+client = pymongo.MongoClient(mongo_url)
+db = client.twitter_db
+followers_collection = db.followers
+
+
 print(api.rate_limit_status())
-
+print(followers_collection)
 # get all followers of the second user followers (not more than 140k)
-followersSecond = [];
+numFollowers = 0
 for page in tweepy.Cursor(api.followers_ids, screen_name=second_user_handle).pages():
-    followersSecond.extend(page)
-    with open('secondUserFollowers.json', 'w') as outfile: # TODO: dump followers to Mongo here
-        json.dump({len(followersSecond): followersSecond}, outfile)
-
-    print("Added another page of length ", len(page), "And overall: ", len(followersSecond),
-          " followers in followersSecond")
-    if len(followersSecond) >= 150000:  # 150k has a cap of one hour of wait time, comment out if you want full
+    print("Page exploring")
+    for follower in page:
+        followers_collection.insert_one({"name": follower})
+    numFollowers += len(page)
+    print("Added another page of length ", len(page), " followers in followersSecond")
+    if numFollowers >= 150000:  # 150k has a cap of one hour of wait time, comment out if you want full
         break
 
-    if len(followersSecond) % 75000 == 0:
+    if numFollowers % 75000 == 0:
         print("Sleeping for 15 minutes now")
-        time.sleep(15 * 60)  # tweepy crashes when it sleeps on its own so I'll enforce 15 min sleep
+        time.sleep(15 * 60)  # Tweepy crashes when it sleeps on its own so I'll enforce 15 min sleep
 
 print("Finished fetching. Now, let's count who follows ", first_user_handle)
 
@@ -44,15 +53,17 @@ second_user_follower_num = api.get_user(second_user_handle).followers_count
 overlaps_found = 0  # to count overlapping followers
 users_checked = 0  # how many users we will iterate on
 
-for userId in followersSecond:
+for document in followers_collection.find():
     # see if they are subscribed to user 1
     users_checked += 1
 
-    if api.show_friendship(source_id=userId, target_screen_name=first_user_handle)[0].following:
-        overlaps_found += 1 # TODO: change these values in mongo for every follower
-    print(str(users_checked) + " iterations estimates " +
-          str(second_user_follower_num * overlaps_found / users_checked)
-          + " of overlapping followers") # TODO: change these values in mongo for every follower
+    if api.show_friendship(source_id=document.name, target_screen_name=first_user_handle)[0].following:
+        overlaps_found += 1
+        followers_collection.find_one_and_update({"_id": document.id},
+                                 {"$set": {"followsOtherUser": "true"}})
+
+    followers_collection.find_one_and_update({"_id": document.id}, {"$set":
+                                    {"currentEstimate": second_user_follower_num * overlaps_found / users_checked}})
 
     if users_checked % 180 == 0:
         print("Sleeping for 15 minutes now")
