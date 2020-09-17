@@ -31,8 +31,7 @@ print(followers_collection) # print info about the collection
 
 
 # Iterate through every follower of second user found and see if they follow first used
-second_user_follower_num = api.get_user(second_user_handle).followers_count
-overlaps_found = 0  # to count overlapping followers
+second_user_follower_num = api.get_user(second_user_handle).followers_count 
 users_checked = 0  # how many users we will iterate on
 
 for document in followers_collection.find({"checked": False}):
@@ -40,7 +39,6 @@ for document in followers_collection.find({"checked": False}):
     users_checked += 1
 
     if api.show_friendship(source_id=document["name"], target_screen_name=first_user_handle)[0].following:
-        overlaps_found += 1
         followers_collection.find_one_and_update({"_id": document["_id"]}, {"$set": {"followsOtherUser": True}})
 
     followers_collection.find_one_and_update({"_id": document["_id"]}, {"$set": {"checked": True}})
@@ -52,9 +50,6 @@ for document in followers_collection.find({"checked": False}):
 
 
 # Statements in console
-print("Overall, we analyzed " + str(users_checked) + " followers of " + second_user_handle + ".")
-print("Out of those, " + str(overlaps_found) + " also follow " + first_user_handle)
+print("Overall, we analyzed " + str(users_checked) + " followers of " + second_user_handle + ".") 
 
-print("Interpolating, we can estimate " +
-      str(second_user_follower_num * overlaps_found / users_checked)
-      + " of overlapping followers")
+print("Overlaps found: " + str(len(followers_collection.find("followsOtherUser": True))))
