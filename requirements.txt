@@ -1,0 +1,5 @@
+pymongo
+tweepy
+time
+os
+python-dotenv
