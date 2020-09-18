@@ -29,17 +29,24 @@ followers_collection = db.followers
 print(api.rate_limit_status()) # print info about the rate limits for Tweepy
 print(followers_collection) # print info about the collection
 
+print("Users checked: " + str(followers_collection.count_documents({"checked": True})))
+print("Overlaps found: " + str(followers_collection.count_documents({"followsOtherUser": True})))
 
 # Iterate through every follower of second user found and see if they follow first used
-second_user_follower_num = api.get_user(second_user_handle).followers_count 
 users_checked = 0  # how many users we will iterate on
+num_of_fails = 0 # number of times tweepy fails when fetching followers
 
 for document in followers_collection.find({"checked": False}):
     # see if they are subscribed to user 1
     users_checked += 1
 
-    if api.show_friendship(source_id=document["name"], target_screen_name=first_user_handle)[0].following:
-        followers_collection.find_one_and_update({"_id": document["_id"]}, {"$set": {"followsOtherUser": True}})
+    try:
+        if api.show_friendship(source_id=document["name"], target_screen_name=first_user_handle)[0].following:
+            followers_collection.find_one_and_update({"_id": document["_id"]}, {"$set": {"followsOtherUser": True}})
+    except tweepy.error.TweepError as err:
+        print("Failed at some point with tweepy, will just skip this follower: {0}".format(err))
+        num_of_fails += 1
+        followers_collection.find_one_and_update({"_id": document["_id"]}, {"$set": {"failed": True}})
 
     followers_collection.find_one_and_update({"_id": document["_id"]}, {"$set": {"checked": True}})
 
@@ -49,7 +56,12 @@ for document in followers_collection.find({"checked": False}):
         time.sleep(15 * 60)
 
 
-# Statements in console
-print("Overall, we analyzed " + str(users_checked) + " followers of " + second_user_handle + ".") 
 
-print("Overlaps found: " + str(len(followers_collection.find("followsOtherUser": True))))
+
+# Statements in console
+num_checked = followers_collection.count_documents({"checked": True})
+num_overlap = followers_collection.count_documents({"followsOtherUser": True})
+print("Tweepy failed ", num_of_fails, " times")
+print("Users checked: ", num_checked)
+print("Overlaps found: ", num_overlap)
+print("Percentage of overlaps: ", num_overlap/num_overlap*100)
