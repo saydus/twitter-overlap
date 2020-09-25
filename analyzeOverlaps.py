@@ -23,7 +23,7 @@ mongo_url = "mongodb+srv://" + mongo_user + ":" + mongo_password + \
 
 client = pymongo.MongoClient(mongo_url)
 db = client.twitter_db
-followers_collection = db.followers
+followers_collection = db[second_user_handle]
 
 
 print(api.rate_limit_status()) # print info about the rate limits for Tweepy

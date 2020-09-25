@@ -8,4 +8,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN ['python', '']
+ARG STORAGE_URL
+ENV STORAGE_URL=$STORAGE_URL
+
+
+
+CMD ['python', 'fetchFollowers.py']
