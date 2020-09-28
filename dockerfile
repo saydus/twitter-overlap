@@ -32,4 +32,4 @@ ENV MONGO_USER=$MONGO_USER
 ARG MONGO_PASSWORD
 ENV MONGO_PASSWORD=$MONGO_PASSWORD
 
-CMD ['python', 'analyzeOverlaps.py']
+CMD ["python","-m","analyzeOverlaps.py"]
