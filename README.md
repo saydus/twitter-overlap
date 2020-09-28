@@ -40,6 +40,13 @@ Repo contains three different approaches to calculate overlaps.
     * After calculating the ratio of overlapping followers in a random sample, we estimate the following for the whole set of subscribers.
     * Based on probabilities, so very flexible. Results are close to accurate on big enough sample (1 million), but never produces the actual result. Hence, this is a good approach to get insight into what the overlap numbers will look like for users with truly big number of followers.
 
+## Sample Output:
+```
+Followers of Tesla analyzed: 1546400
+Overlaps with elonmusk found: 1407224
+```
+
+
 ## Other important stuff
 Running `fetchFollowers.py`, the script will populate a MongoDB Atlas collection called `followers`. `analyzeOverlaps.py` will iterate through the collection and add boolean fields `checked` and `followsOtherUser`. 
 
