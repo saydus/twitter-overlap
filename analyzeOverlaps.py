@@ -25,7 +25,6 @@ client = pymongo.MongoClient(mongo_url)
 db = client.twitter_db
 followers_collection = db["followers"]
 
-
 print(api.rate_limit_status()) # print info about the rate limits for Tweepy
 print(followers_collection) # print info about the collection
 
@@ -36,8 +35,7 @@ print("Overlaps found: " + str(followers_collection.count_documents({first_user_
 users_checked = 0  # how many users we will iterate on
 num_of_fails = 0 # number of times tweepy fails when fetching followers
 
-
-for document in followers_collection.find({ first_user_handle + 'Checked' : { '$exists': False } }):
+for document in followers_collection.find({ first_user_handle + 'Checked': { '$exists': False } }):
     users_checked += 1
     try:
         if api.show_friendship(source_id=document["name"], target_screen_name=first_user_handle)[0].following:
@@ -55,8 +53,8 @@ for document in followers_collection.find({ first_user_handle + 'Checked' : { '$
         time.sleep(15 * 60)
 
 # Statements in console
-num_checked = followers_collection.count_documents({"checked": True})
-num_overlap = followers_collection.count_documents({"followsOtherUser": True})
+num_checked = followers_collection.count_documents({first_user_handle + 'Checked': True})
+num_overlap = followers_collection.count_documents({first_user_handle: True})
 print("Tweepy failed ", num_of_fails, " times")
 print("Users checked: ", num_checked)
 print("Overlaps found: ", num_overlap)
