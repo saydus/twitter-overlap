@@ -1,8 +1,6 @@
 import tweepy
 import time
 import pymongo
-import os
-
 auth = tweepy.OAuthHandler(os.getenv("CONSUMER_KEY"), os.getenv("CONSUMER_SECRET"))
 auth.set_access_token(os.getenv("ACCESS_TOKEN"), os.getenv("ACCESS_TOKEN_SECRET"))
 
@@ -16,7 +14,7 @@ second_user_handle = os.getenv("SECOND_USER")
 
 mongo_user = os.getenv("MONGO_USER")
 mongo_password = os.getenv("MONGO_PASSWORD")
-mongo_url = "mongodb+srv://" + mongo_user + ":" + mongo_password + \
+mongo_url = "mongodb+srv://" + mongo_user + ":" + mongo_password +  \
             "@cluster0.ecwwk.mongodb.net/<dbname>?retryWrites=true&w=majority"
 
 client = pymongo.MongoClient(mongo_url)
@@ -54,5 +52,5 @@ for document in followers_collection.find({ first_user_handle + 'Checked': { '$e
 num_checked = followers_collection.count_documents({first_user_handle + 'Checked': True})
 num_overlap = followers_collection.count_documents({first_user_handle: True})
 print("Tweepy failed ", num_of_fails, " times")
-print("Users checked: ", num_checked)
-print("Overlaps found: ", num_overlap)
+print("Followers of ", second_user_handle, " analyzed: ",  num_checked)
+print("Overlaps with ", first_user_handle, " found: ", num_overlap)
