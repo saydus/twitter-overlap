@@ -61,5 +61,5 @@ for document in followers_collection.find():
 num_checked = followers_collection.count_documents({"checked": True})
 num_overlap = followers_collection.count_documents({"followsOtherUser": True})
 print("Tweepy failed ", num_of_fails, " times")
-print("Users checked: ", num_checked)
-print("Overlaps found: ", num_overlap)
+print("Followers of ", second_user_handle, " analyzed: ",  num_checked)
+print("Overlaps with ", first_user_handle, " found: ", num_overlap)
