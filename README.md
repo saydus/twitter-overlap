@@ -2,7 +2,7 @@ Twitter Overlap
 ---
 A python script to find the number of overlapping followers between different Twitter users. 
  
-The script uses [Tweepy](https://github.com/tweepy/tweepy), and because of this [issue](https://github.com/tweepy/tweepy/issues/617), I had to be a little hacky with timeouts (more about this [here](https://docs.google.com/presentation/d/1O3CEgcAUOC1-aQjZ77A3QbBT_meE4uO_xgbYJGdr9Ns/edit?usp=sharing)).
+The script uses [Tweepy](https://github.com/tweepy/tweepy). Read about approaches to take for different use cases [here](https://docs.google.com/presentation/d/1O3CEgcAUOC1-aQjZ77A3QbBT_meE4uO_xgbYJGdr9Ns/edit?usp=sharing).
 
 ## Getting Started
 Install all dependencies from `requiremnts.txt`, using `pip3 install`. If you are having issues with an SSL certificate when trying to run the script, use `PYTHONHTTPSVERIFY=0 python3 fetchFollowers.py
