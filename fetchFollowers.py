@@ -35,7 +35,7 @@ numFollowers = 0
 for page in tweepy.Cursor(api.followers_ids, screen_name=second_user_handle).pages():
     print("Page exploring")
     for follower in page:
-        followers_collection.insert_one({"name": follower, "checked": False})
+        followers_collection.insert_one({"name": follower, first_user_handle + 'Checked': False})
 
     numFollowers += len(page)
     print("Added another page of length ", len(page), " followers in followersSecond")

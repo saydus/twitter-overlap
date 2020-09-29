@@ -5,8 +5,10 @@ A python script to find the number of overlapping followers between different Tw
 The script uses [Tweepy](https://github.com/tweepy/tweepy). Read about approaches to take for different use cases [here](https://docs.google.com/presentation/d/1O3CEgcAUOC1-aQjZ77A3QbBT_meE4uO_xgbYJGdr9Ns/edit?usp=sharing).
 
 ## Getting Started
-Install all dependencies from `requiremnts.txt`, using `pip3 install`. If you are having issues with an SSL certificate when trying to run the script, use `PYTHONHTTPSVERIFY=0 python3 fetchFollowers.py
+Install all dependencies from `requirements.txt`, using `pip3 install -r requirements.txt`. If you are having issues with an SSL certificate when trying to run the script, use `PYTHONHTTPSVERIFY=0 python3 fetchFollowers.py
 ` to start it. 
+
+Set up a MongoDB Atlas database, and obtain the link for connecting to it. From the link, get the username and password, which you will insert to the `.env` as specified below.
 
 Create a `.env` file in repo's root to include authentication keys for your Twitter Developer account and other useful environment variables in the following format:
 ```.env
@@ -52,4 +54,6 @@ Running `fetchFollowers.py`, the script will populate a MongoDB Atlas collection
 
 If you stopped the program while fetching the followers, you can just run `analyzeOverlaps.py`, which will get you the result for already fetched and cached followers. 
 
-For a longer wait time, you can run `fetchFollowers.py` locally (because it usually takes much less time to execute) and `analyzeOverlaps.py`.
+For a longer wait time, you can run `fetchFollowers.py` locally (because it usually takes much less time to execute) and `analyzeOverlaps.py` in the cloud.
+
+For twitter accounts with relatively small number of followers (< 5 million), run `fetchFollowers.py` for both accounts. Then, run `compareFetchedFollowers.py`. 
