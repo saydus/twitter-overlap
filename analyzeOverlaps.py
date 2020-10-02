@@ -37,7 +37,7 @@ users_checked = 0  # how many users we will iterate on
 num_of_fails = 0 # number of times tweepy fails when fetching followers
 
 
-for document in followers_collection.find():
+for document in followers_collection.find({ first_user_handle + 'Checked': False }):
     # see if they are subscribed to user 1
     users_checked += 1
 
