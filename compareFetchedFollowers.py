@@ -17,13 +17,15 @@ second_followers_collection = db[second_user_handle]
 first_followers_collection = db[first_user_handle]
 
 
-for document in second_followers_collection.find({}):
+for document in second_followers_collection.find({first_user_handle: {"$exists": False}}):
     if first_followers_collection.find({'name': { "$in": document["name"]}}).count() > 0:
-        second_followers_collection.find_one_and_update({"_id": document["_id"]},
-                                                 {"$set": {first_user_handle: True}})
-        first_followers_collection.find_one_and_update({"name": document["name"]},
-                                                        {"$set": {second_user_handle: True}})
-
+        follows = True
+    else:
+        follows = False
+    second_followers_collection.find_one_and_update({"_id": document["_id"]},
+                                                    {"$set": {first_user_handle: follows}})
+    first_followers_collection.find_one_and_update({"name": document["name"]},
+                                                   {"$set": {second_user_handle: follows}})
 
 overlap = second_followers_collection.find({first_user_handle: True}).count()
 print("Number of overlapping followers: ", overlap)
