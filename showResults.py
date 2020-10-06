@@ -1,5 +1,3 @@
-import tweepy
-import time
 import pymongo
 import os
 from dotenv import load_dotenv
