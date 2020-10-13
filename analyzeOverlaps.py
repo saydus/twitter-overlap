@@ -44,6 +44,8 @@ for document in followers_collection.find({ first_user_handle + 'Checked': False
     try:
         if api.show_friendship(source_id=document["name"], target_screen_name=first_user_handle)[0].following:
             followers_collection.find_one_and_update({"_id": document["_id"]}, {"$set": {first_user_handle: True}})
+        else:
+            followers_collection.find_one_and_update({"_id": document["_id"]}, {"$set": {first_user_handle: False}})
     except tweepy.error.TweepError as err:
         print("Failed at some point with tweepy, will just skip this follower: {0}".format(err))
         num_of_fails += 1
