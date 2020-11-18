@@ -4,6 +4,12 @@ A python script to find the number of overlapping followers between different Tw
  
 The script uses [Tweepy](https://github.com/tweepy/tweepy). Read about approaches to take for different use cases [here](https://docs.google.com/presentation/d/1O3CEgcAUOC1-aQjZ77A3QbBT_meE4uO_xgbYJGdr9Ns/edit?usp=sharing).
 
+## Sample Output:
+```
+Followers of Tesla analyzed: 1546400
+Overlaps with elonmusk found: 1407224
+```
+
 ## Getting Started
 Install all dependencies from `requirements.txt`, using `pip3 install -r requirements.txt`. If you are having issues with an SSL certificate when trying to run the script, use `PYTHONHTTPSVERIFY=0 python3 fetchFollowers.py
 ` to start it. 
@@ -42,11 +48,7 @@ Repo contains three different approaches to calculate overlaps.
     * After calculating the ratio of overlapping followers in a random sample, we estimate the following for the whole set of subscribers.
     * Based on probabilities, so very flexible. Results are close to accurate on big enough sample (1 million), but never produces the actual result. Hence, this is a good approach to get insight into what the overlap numbers will look like for users with truly big number of followers.
 
-## Sample Output:
-```
-Followers of Tesla analyzed: 1546400
-Overlaps with elonmusk found: 1407224
-```
+
 
 
 ## Other important stuff
