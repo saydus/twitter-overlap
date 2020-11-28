@@ -1,6 +1,26 @@
-Twitter Overlap
+
+<!-- PROJECT LOGO -->
+
+<br />
+<p align="center">
+  <a href="https://github.com/saydus/twitter-overlap">
+    <img src="pics/logo.png" alt="Logo" width="80" height="80">
+  </a>
+
+  <h3 align="center">Twitter Overlap</h3>
+
+  <p align="center">
+    Efficient and reliable way to analyze overlaps in followers of different Twitter accounts. 
+    <br />
+    <br />
+    <a href="https://github.com/saydus/twitter-overlap/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/saydus/twitter-overlap/issues">Request Feature</a>
+  </p>
+</p>
+
 ---
-A python script to find the number of overlapping followers between different Twitter users. 
+
  
 The script uses [Tweepy](https://github.com/tweepy/tweepy). Read about approaches to take for different use cases [here](https://docs.google.com/presentation/d/1O3CEgcAUOC1-aQjZ77A3QbBT_meE4uO_xgbYJGdr9Ns/edit?usp=sharing).
 
