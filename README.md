@@ -4,7 +4,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/saydus/twitter-overlap">
-    <img src="pics/logo.png" alt="Logo">
+    <img src="pics/logo.png" alt="Logo" width="110" height="80">
   </a>
 
   <h3 align="center">Twitter Overlap</h3>
